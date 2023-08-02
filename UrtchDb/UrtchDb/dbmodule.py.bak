@@ -1,0 +1,41 @@
+import pandas as pd
+import sqlite3
+
+class UrtchDb:
+    def __init__(self, connection): 
+        self.connection = connection
+        self.cursor = self.connection.cursor()
+        self.DbTables = []
+        
+    def tables(self):
+        dbtables = self.cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+        alltables = [] 
+        tables_info = dbtables.fetchall()
+        
+        for table in tables_info:
+            alltables.append(table[0])
+            
+        return alltables 
+        
+    def dataFrames(self):
+        dataframes = dict()
+        for table in self.tables():
+            dataframes[table] = pd.read_sql_query(f"SELECT * from {table};", self.connection)
+        return dataframes
+
+    def tableColumnsInfo(self, tableName):
+        col_info = self.cursor.execute(f"PRAGMA table_info({tableName})")
+        return col_info.fetchall()
+        
+    def tableColumns(self, tableName):
+        column_names = []
+        col_info = self.cursor.execute(f"PRAGMA table_info({tableName})")
+        for col in raw_columns:
+            column_names.append(col[1])
+        return column_names
+        
+    def readQueryValue(self, query):
+        q_info = self.cursor.execute(query)
+        result = q_info.fetchone()
+        return result[0]
+        

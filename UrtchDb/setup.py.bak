@@ -1,0 +1,13 @@
+from setuptools import setup, find_packages 
+
+setup(
+    name='UrtchDb',
+    version='1.0.0',
+    description='Library for reading all the tables in a database',
+    author='Uche Emmanuel',
+    packages=find_packages(),
+    install_requires=[
+        'pandas',
+        'sqlite3'
+    ]
+)
